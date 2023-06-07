@@ -1,0 +1,304 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"> Task Table</h3>
+
+
+            <div class="card-tools">
+              <button type="button" class="btn btn-default"  data-toggle="modal" data-target="#modal-lg">
+                <i class="fas fa-plus-circle" style="color: #017c04;"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+              <thead>
+                <tr>
+                  <th class="border-top-0">id</th>
+                  <th class="border-top-0">Solicitante</th>
+                  <th class="border-top-0">Departamento</th>
+                  <th class="border-top-0">Soporte</th>
+                  <th class="border-top-0">Status</th>
+                  <th class="border-top-0">Fecha y Hora</th>
+                  <th class="border-top-0">Accions</th>
+
+              </tr>
+              </thead>
+              <tbody *ngFor=" let task of ListTasks; let i = index">
+                <tr >
+                  <td>{{task.id}}</td>
+                <td>{{task.employeeName}}</td>
+                    <td class="txt-oflo">{{task.department}}</td>
+                    <td>{{task.support.name}}</td>
+                      <td>
+                        <div *ngIf="task.statusTask=='REALIZADO'" >
+                            <span class="badge btn-success" >
+                                    {{task.statusTask}}
+                            </span>
+                        </div>
+
+                          <div *ngIf="task.statusTask =='PENDIENTE'">
+                            <span class="badge btn-warning" >
+                                    {{task.statusTask}}
+                            </span>
+                          </div>
+                          <div *ngIf="task.statusTask =='CANCELADO'">
+                            <span class="badge btn-danger">
+                                    {{task.statusTask}}
+                            </span>
+                          </div>
+                      </td>
+                  <td class="txt-oflo">{{task.createdOn | date: 'short'}}</td>
+                  <td>
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                          <i class="fas fa-check"></i>
+                        </button>
+                        <div class="dropdown-menu" >
+                          <form [formGroup]=" StatusUpdateForm" >
+                            <input type="text" class="form-control" formControlName="statusTask"  name="statusTask" hidden>
+                            <a class="dropdown-item"><button  type="submit" class="btn btn-block btn-success btn-sm" (click)="updateStatus(task.id, 'REALIZADO')" >Realizado</button></a>
+                            <a class="dropdown-item"><button  type="submit"  class="btn btn-block btn-danger btn-sm" (click)="updateStatus(task.id, 'CANCELADO')" >Cancelado</button></a>
+                          </form>
+                        </div>
+                      </div>
+
+
+
+                    <button type="button" class="btn btn-default"  data-toggle="modal" data-target="#modal-lg-edit" (click)="updateTask(task.id)">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" (click)="desactiveTask(task.id)"  >
+                      <i class="far fa-trash-alt"></i>
+                    </button>
+
+
+
+
+
+                   </td>
+                </tr>
+         <!--   //FORMULARIO DE CREACION -->
+                <div class="modal fade" id="modal-lg">
+                  <div class="modal-dialog modal-lg">
+                    <form [formGroup]="taskForm" (ngSubmit)="newTask()" >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">New Task</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <section class="content">
+                          <div class="container-fluid">
+                              <div class="card-body">
+
+
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                      <div class="form-group">
+                                        <label>Solicitante</label>
+                                        <input type="text" class="form-control" formControlName="employeeName" name="employeeName" placeholder="Solicitante">
+                                      </div>
+
+                                      <div class="form-group">
+                                        <label>Descripcion</label>
+                                        <input type="text" class="form-control" formControlName="description"  name="description" placeholder="Descripcion">
+                                      </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                      <div class="form-group">
+                                        <label>Departamento</label>
+                                        <input type="text" class="form-control" formControlName="department" name="department" placeholder="Departamento">
+
+                                      </div>
+
+                                      <div class="form-group">
+                                        <label>Tipo de task</label>
+                                        <select formControlName="typeRequest" value="" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                          <option *ngFor="let valor of listRequest" value="{{valor}}" name="typeRequest">{{valor}}</option>
+
+
+
+                                        </select>
+                                      </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                      <div class="form-group">
+                                        <label>Tipo de tarea</label>
+                                        <select formControlName="typeTask" value="" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                          <option *ngFor="let valorType of listType" value="{{valorType}}" name="typeTask">{{valorType}}</option>
+                                        </select>
+                                      </div>
+
+                                      <div class="form-group">
+                                        <label>Estado</label>
+                                        <input type="text" class="form-control" id="" placeholder="Estado" disabled>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                      <div class="form-group">
+                                        <label>Soporte</label>
+                                        <select formControlName="support_id" value=""  class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                          <option *ngFor="let v of Listsupport" value="{{v.id}}" name="support_id" selected="selected" >{{v.name}}</option>
+
+                                        </select>
+                                      </div>
+
+                                      <div class="form-group">
+                                        <label>Extencion</label>
+                                        <input type="text" class="form-control" formControlName="extDepart" name="extDepart" placeholder="no. ext">
+                                      </div>
+                                    </div>
+                                  </div>
+
+
+
+                              </div>
+
+                              <div class="card-footer">
+                                Visit <a href="https://select2.github.io/">Select2 documentation</a> for more examples and information about
+                                the plugin.
+                              </div>
+                            </div>
+
+
+                        </section>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </form>
+                  </div>
+                </div>
+
+              <!--   //FORMULARIO DE EDICION -->
+
+                <div class="modal fade" id="modal-lg-edit">
+                  <div class="modal-dialog modal-lg" >
+                    <form [formGroup]="updateForm"  (ngSubmit)="editTask(userId)" >
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Edit Task: {{userId}}</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <section class="content">
+                            <div class="container-fluid">
+                                <div class="card-body">
+
+
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label>Solicitante</label>
+                                          <input type="text" class="form-control" formControlName="employeeName" name="employeeName" placeholder="Solicitante">
+                                        </div>
+
+                                        <div class="form-group">
+                                          <label>Descripcion</label>
+                                          <input type="text" class="form-control" formControlName="description"  name="description"  placeholder="Descripcion">
+                                        </div>
+
+                                      </div>
+
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label>Departamento</label>
+                                          <input type="text" class="form-control" formControlName="department" name="department" placeholder="Departamento">
+
+                                        </div>
+
+                                        <div class="form-group">
+                                          <label>Tipo de task*</label>
+                                          <select formControlName="typeRequest" value="" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                            <option *ngFor="let valorRequest of listRequest" value="{{valorRequest}}" name="typeRequest">{{valorRequest}}</option>
+                                          </select>
+                                        </div>
+
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label>Tipo de tarea</label>
+                                          <select formControlName="typeTask" value="" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                            <option *ngFor="let valorType of listType" value="{{valorType}}" name="typeTask">{{valorType}}</option>
+                                          </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <label>Estado</label>
+                                          <input type="text" class="form-control" id="" placeholder="Estado" disabled>
+                                        </div>
+                                      </div>
+
+                                      <div class="col-md-6">
+                                         <div class="form-group">
+                                          <label>Soporte</label>
+                                          <select formControlName="support" value=""  class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                            <option *ngFor="let v of Listsupport" value="{{v.id}}" name="support" selected="selected">{{v.name}}</option>
+
+                                          </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <label>Extencion</label>
+                                          <input type="text" class="form-control" formControlName="extDepart" name="extDepart" placeholder="no. ext">
+                                        </div>
+                                      </div>
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="card-footer">
+                                  Visit <a href="https://select2.github.io/">Select2 documentation</a> for more examples and information about
+                                  the plugin.
+                                </div>
+                              </div>
+
+
+                          </section>
+
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+
+
+                  </div>
+                </div>
+
+
+            </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+
+  </section>
+
+
+
+
+

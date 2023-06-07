@@ -1,0 +1,221 @@
+
+<section class="content">
+  <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <!-- Custom Tabs -->
+            <div class="card">
+              <div class="card-header ">
+                <h3 class="card-title">Soportes</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-default"  data-toggle="modal" data-target="#modal-lg">
+                    <i class="fas fa-user-plus"></i>
+
+                  </button>
+                </div>
+              </div><!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+
+                    <section class="content">
+                      <div class="card card-solid">
+
+                          <div class="card-body pb-0" >
+
+                            <div class="row"  >
+
+                              <div  *ngFor=" let support of ListSupports  ; let i = index" class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+
+                                <div class="card bg-light d-flex flex-fill">
+                                  <div class="card-header text-muted border-bottom-0">
+                                   Soporte tecnico
+                                  </div>
+                                  <div class="card-body pt-0">
+                                    <div class="row">
+                                      <div class="col-7">
+                                        <h2 class="lead"><b>{{support.name}}</b></h2>
+                                        <p class="text-muted text-sm"  *ngIf="support.isActive; else notActive "><b>Estado: Activo </b></p>
+                                        <ng-template #notActive>
+                                          <p class="text-muted text-sm"><b>Estado: no Activo </b></p>
+                                        </ng-template>
+
+                                        <ul class="ml-4 mb-0 fa-ul text-muted">
+                                          <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Email: {{support.email}}</li>
+                                          <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: {{support.phone}}</li>
+                                        </ul>
+                                      </div>
+
+                                    </div>
+                                  </div>
+                                  <div class="card-footer">
+                                    <div class="text-right">
+                                      <a  class="btn btn-sm bg-teal">
+                                        <i class="fas fa-user-slash" (click)="desactiveSupport(support.id)"></i>
+                                      </a>
+                                      <a  class="btn btn-sm btn-primary" data-toggle="modal" data-target="#ModalEdit"  (click)="update(support.id)" >
+                                        <i class="fas fa-user-edit"></i>
+                                      </a>
+                                      <a  class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#exampleModalCenter">
+                                        <i class="fas fa-tasks"></i>
+                                      </a>
+                                    </div>
+
+
+                                  </div>
+                                </div>
+
+                              <!-- Modal -->
+                              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title"   id="exampleModalLongTitle">Record de tareas</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div  class="modal-body">
+                                      <ul class="list-group">
+                                        <li class="list-group-item">Realizadas: </li>
+                                        <li class="list-group-item">Pendientes:</li>
+                                        <li class="list-group-item">Canceladas:</li>
+                                        <li class="list-group-item">Total:</li>
+                                      </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- Modal NEW -->
+
+                              <div class="modal fade" id="modal-lg">
+                                <div class="modal-dialog modal-lg">
+                                  <form  [formGroup]="supportForm" (ngSubmit)="newSupport()">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h4 class="modal-title">New SUPPORT</h4>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+
+                                    <div class="modal-body">
+
+
+
+                                                    <div class="card-body">
+                                                      <div class="form-group">
+                                                        <label >Name</label>
+                                                        <input type="text" class="form-control" formControlName="name" name="name" placeholder="Enter Name">
+                                                      </div>
+                                                      <div class="form-group">
+                                                        <label >Phone</label>
+                                                        <input type="text" class="form-control" formControlName="phone" name="phone"  placeholder="Enter Phone">
+                                                      </div>
+
+                                                      <div class="form-group">
+                                                        <label >Email</label>
+                                                        <input type="email" class="form-control" formControlName="email" name="email"  placeholder="Enter Email">
+                                                      </div>
+                                                    </div>
+
+                                            <div class="card-footer">
+                                              Visit <a href="https://select2.github.io/">Select2 documentation</a> for more examples and information about
+                                              the plugin.
+                                            </div>
+
+
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                  </div>
+                                </form>
+                                </div>
+                              </div>
+
+
+                              <!-- Modal EDIT -->
+
+
+                              <div class="modal fade" id="ModalEdit">
+                                <div class="modal-dialog modal-lg">
+                                  <form [formGroup]="updateForm" (ngSubmit)="editSupport(getId)">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h4 class="modal-title">Edit {{Name}}</h4>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <section class="content">
+                                        <div class="container-fluid">
+                                            <div class="card-body">
+                                                    <div class="card-body">
+                                                      <div class="form-group">
+                                                        <label for="exampleInputEmail1">Name</label>
+                                                        <input type="text" class="form-control" formControlName="name" name="name" placeholder="Enter email">
+                                                      </div>
+                                                      <div class="form-group">
+                                                        <label for="exampleInputPassword1">Phone</label>
+                                                        <input type="text" class="form-control" formControlName="phone" name="phone" placeholder="Password">
+                                                      </div>
+
+                                                      <div class="form-group">
+                                                        <label for="exampleInputPassword1">Email</label>
+                                                        <input type="email" class="form-control" formControlName="email" name="email" placeholder="Password">
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                              </div>
+                                            <div class="card-footer">
+                                              Visit <a href="https://select2.github.io/">Select2 documentation</a> for more examples and information about
+                                              the plugin.
+                                            </div>
+                                      </section>
+
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                  </div>
+                                </form>
+                                </div>
+                              </div>
+
+
+
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+                      </section>
+                  </div>
+
+
+
+
+
+                  <!-- /.tab-pane -->
+
+                  <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+              </div><!-- /.card-body -->
+            </div>
+            <!-- ./card -->
+          </div>
+          <!-- /.col -->
+        </div>
+</div>
+</section>
+
+

@@ -1,0 +1,15 @@
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      DATABASE_HOST: 127.0.0.1 
+      POSTGRES_DATABASE: db_soporteapp
+      POSTGRES_USER: fabi
+      POSTGRES_PASSWORD: secret12345
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
